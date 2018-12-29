@@ -3,6 +3,7 @@ use App\Post;
 use App\User;
 use App\Role;
 use App\Country;
+use App\Photo;
 
 /*
 |--------------------------------------------------------------------------
@@ -232,4 +233,10 @@ Route::get('/user/{id}/photos', function($id){
 Route::get('/post/{id}/photos', function($id){
     $photos = Post::findOrFail($id)->photos;
     return $photos;
+});
+
+Route::get('/photo/{id}/entity', function($id){
+    $photo = Photo::findOrFail($id);
+    //It returns a User or a Post
+    return $photo->imageable;
 });
