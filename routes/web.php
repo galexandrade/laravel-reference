@@ -230,5 +230,6 @@ Route::get('/user/{id}/photos', function($id){
 });
 
 Route::get('/post/{id}/photos', function($id){
-    return Post::findOrFail($id)->photos;
+    $photos = Post::findOrFail($id)->photos;
+    return $photos;
 });
