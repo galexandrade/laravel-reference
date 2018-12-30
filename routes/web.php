@@ -1,9 +1,11 @@
 <?php
 use App\Post;
+use App\Tag;
 use App\User;
 use App\Role;
 use App\Country;
 use App\Photo;
+use App\Video;
 
 /*
 |--------------------------------------------------------------------------
@@ -239,4 +241,21 @@ Route::get('/photo/{id}/entity', function($id){
     $photo = Photo::findOrFail($id);
     //It returns a User or a Post
     return $photo->imageable;
+});
+
+//Polymorphic ManyToMany
+Route::get('/post/{id}/tags', function($id){
+    return Post::findOrFail($id)->tags;
+});
+
+Route::get('/video/{id}/tags', function($id){
+    return Video::findOrFail($id)->tags;
+});
+
+Route::get('/tags/{id}/videos', function($id){
+    return Tag::find($id)->videos;
+});
+
+Route::get('/tags/{id}/posts', function($id){
+    return Tag::find($id)->posts;
 });
