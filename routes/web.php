@@ -60,7 +60,7 @@ Route::get('/post/{id}', 'PostsController@showPost');
 |--------------------------------------------------------------------------
  */
 
-Route::get('/insert', function(){
+Route::get('/ref/insert', function(){
     DB::insert('insert into posts (title, body) values (?, ?)', ['PHP WITH LARAVE', 'PHP Laravel is a nice think to learn']);
 });
 /*
@@ -90,22 +90,22 @@ Route::get('/delete', function(){
 |--------------------------------------------------------------------------
  */
 
-Route::get('/read', function(){
+Route::get('/ref/read', function(){
     $posts = Post::all();
     return $posts;
 });
 
-Route::get('/find/{id}', function($id){
+Route::get('/ref/find/{id}', function($id){
     $post = Post::find($id);
     return $post;
 });
 
-Route::get('/find-where/{id}', function($id){
+Route::get('/ref/find-where/{id}', function($id){
     $posts = Post::where('id', $id)->orderBy('id', 'desc')->take(1)->get();
     return $posts;
 });
 
-Route::get('/find-more/{id}', function($id){
+Route::get('/ref/find-more/{id}', function($id){
     //Show a friendly message if not found
     //$post = Post::findOrFail($id);
     //return $post;
@@ -114,7 +114,7 @@ Route::get('/find-more/{id}', function($id){
     return $posts;
 });
 
-Route::get('/basic-insert', function(){
+Route::get('/ref/basic-insert', function(){
     $post = new Post;
     $post->title = 'new Title';
     $post->body = 'New body';
@@ -122,7 +122,7 @@ Route::get('/basic-insert', function(){
     $post->save();
 });
 
-Route::get('/basic-update/{id}', function($id){
+Route::get('/ref/basic-update/{id}', function($id){
     $post = Post::findOrFail($id);
     $post->title = 'updated Title';
     $post->body = 'updated body';
@@ -131,7 +131,7 @@ Route::get('/basic-update/{id}', function($id){
 });
 
 //Create multiple records
-Route::get('/create', function(){
+Route::get('/ref/create', function(){
     Post::create([
         'title'=>'The create method',
         'body'=>'It really does work'
@@ -139,7 +139,7 @@ Route::get('/create', function(){
 });
 
 //Update
-Route::get('/update/{id}', function($id){
+Route::get('/ref/update/{id}', function($id){
     Post::where('id', $id)->where('is_admin', 0)->update([
         'title'=>'The UPDATE method',
         'body'=>'UPDATE! It really does work'
@@ -147,39 +147,39 @@ Route::get('/update/{id}', function($id){
 });
 
 //Delete
-Route::get('/delete/{id}', function($id){
+Route::get('/ref/delete/{id}', function($id){
     $post = Post::findOrFail($id);
     $post->delete();
 });
 
 //Delete
-Route::get('/destroy/{id}', function($id){
+Route::get('/ref/destroy/{id}', function($id){
     //Post::destroy($id);
     Post::where('id', $id)->delete();
 });
 
-Route::get('/destroy-multiple', function(){
+Route::get('/ref/destroy-multiple', function(){
     Post::destroy([0, 1]);
 });
 
-Route::get('/softdelete/{id}', function($id){
+Route::get('/ref/softdelete/{id}', function($id){
     $post = Post::findOrFail($id)->delete();
 });
 
 //Delete the item permanently
-Route::get('/force-delete/{id}', function($id){
+Route::get('/ref/force-delete/{id}', function($id){
     return Post::onlyTrashed()->where('id', $id)->forceDelete();
 });
 
-Route::get('/read-deleted', function(){
+Route::get('/ref/read-deleted', function(){
     return Post::onlyTrashed()->get();
 });
 
-Route::get('/read-deleted/{id}', function($id){
+Route::get('/ref/read-deleted/{id}', function($id){
     return Post::withTrashed()->where('id', $id)->get();
 });
 
-Route::get('/restore/{id}', function($id){
+Route::get('/ref/restore/{id}', function($id){
     return Post::withTrashed()->where('id', $id)->restore();
 });
 
@@ -190,35 +190,35 @@ Route::get('/restore/{id}', function($id){
  */
 
 //OneToOne
-Route::get('/user/{id}/post', function($id){
+Route::get('/ref/user/{id}/post', function($id){
     $user = User::findOrFail($id);
     return $user->post;
 });
 
 //OneToOne inverse
-Route::get('/post/{id}/user', function($id){
+Route::get('/ref/post/{id}/user', function($id){
     $post = Post::findOrFail($id);
     return $post->user;
 });
 
 //OneToMany
-Route::get('/user/{id}/posts', function($id){
+Route::get('/ref/user/{id}/posts', function($id){
     $user = User::findOrFail($id);
     return $user->posts;
 });
 
 //ManyToMany
-Route::get('/user/{id}/roles', function($id){
+Route::get('/ref/user/{id}/roles', function($id){
     return User::findOrFail($id)->roles()->orderBy('id', 'desc')->get();
 });
 
 //ManyToMany
-Route::get('/role/{id}/users', function($id){
+Route::get('/ref/role/{id}/users', function($id){
     return Role::findOrFail($id)->users;
 });
 
 //ManyThrough
-Route::get('/country/{id}/posts', function($id){
+Route::get('/ref/country/{id}/posts', function($id){
     return Country::findOrFail($id)->posts;
 });
 
@@ -228,34 +228,41 @@ Route::get('/country/{id}/posts', function($id){
 |--------------------------------------------------------------------------
  */
 
-Route::get('/user/{id}/photos', function($id){
+Route::get('/ref/user/{id}/photos', function($id){
     return User::findOrFail($id)->photos;
 });
 
-Route::get('/post/{id}/photos', function($id){
+Route::get('/ref/post/{id}/photos', function($id){
     $photos = Post::findOrFail($id)->photos;
     return $photos;
 });
 
-Route::get('/photo/{id}/entity', function($id){
+Route::get('/ref/photo/{id}/entity', function($id){
     $photo = Photo::findOrFail($id);
     //It returns a User or a Post
     return $photo->imageable;
 });
 
 //Polymorphic ManyToMany
-Route::get('/post/{id}/tags', function($id){
+Route::get('/ref/post/{id}/tags', function($id){
     return Post::findOrFail($id)->tags;
 });
 
-Route::get('/video/{id}/tags', function($id){
+Route::get('/ref/video/{id}/tags', function($id){
     return Video::findOrFail($id)->tags;
 });
 
-Route::get('/tags/{id}/videos', function($id){
+Route::get('/ref/tags/{id}/videos', function($id){
     return Tag::find($id)->videos;
 });
 
-Route::get('/tags/{id}/posts', function($id){
+Route::get('/ref/tags/{id}/posts', function($id){
     return Tag::find($id)->posts;
 });
+
+/*
+|--------------------------------------------------------------------------
+| CRUD APPLICATION
+|--------------------------------------------------------------------------
+ */
+Route::resource('/posts', 'PostsController');
